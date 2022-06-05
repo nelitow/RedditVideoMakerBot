@@ -1,3 +1,5 @@
+import os
+from time import time
 from moviepy.editor import (
     VideoFileClip,
     AudioFileClip,
@@ -9,12 +11,17 @@ from moviepy.editor import (
 )
 from utils.console import print_step
 
+import reddit.subreddit
+import re
+
 
 W, H = 1080, 1920
 
 
 def make_final_video(number_of_clips):
-    print_step("Creating the final video...")
+    global submission
+
+    print_step("Creating the final video 🎥")
     VideoFileClip.reW = lambda clip: clip.resize(width=W)
     VideoFileClip.reH = lambda clip: clip.resize(width=H)
 
@@ -25,6 +32,7 @@ def make_final_video(number_of_clips):
         .crop(x1=1166.6, y1=0, x2=2246.6, y2=1920)
     )
     # Gather all audio clips
+    print_step("Gathering all audio clips...")
     audio_clips = []
     for i in range(0, number_of_clips):
         audio_clips.append(AudioFileClip(f"assets/mp3/{i}.mp3"))
@@ -33,6 +41,7 @@ def make_final_video(number_of_clips):
     audio_composite = CompositeAudioClip([audio_concat])
 
     # Gather all images
+    print_step("Gathering all images...")
     image_clips = []
     for i in range(0, number_of_clips):
         image_clips.append(
@@ -48,14 +57,21 @@ def make_final_video(number_of_clips):
         .set_position("center")
         .resize(width=W - 100),
     )
+    print_step("Creating the final video...")
     image_concat = concatenate_videoclips(image_clips).set_position(
         ("center", "center")
     )
     image_concat.audio = audio_composite
     final = CompositeVideoClip([background_clip, image_concat])
-    final.write_videofile(
-        "assets/final_video.mp4", fps=30, audio_codec="aac", audio_bitrate="192k"
-    )
+    final = final.speedx(1.5)
+    filename = (re.sub('[?\"%*:|<>]', '', ("assets/" + reddit.subreddit.submission.title + " #desabafos.mp4")))
+    # if filename already exists in folder, skip
+    if os.path.isfile(filename):
+        print("File already exists, skipping...")
+    else:
+        final.write_videofile(filename, fps=30, audio_codec="aac", audio_bitrate="192k")
+
+    print_step("Done! 🎉")
 
     for i in range(0, number_of_clips):
         pass
