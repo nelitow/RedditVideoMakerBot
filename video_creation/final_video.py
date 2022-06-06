@@ -64,7 +64,7 @@ def make_final_video(number_of_clips):
     image_concat.audio = audio_composite
     final = CompositeVideoClip([background_clip, image_concat])
     final = final.speedx(1.5)
-    filename = (re.sub('[?\"%*:|<>]', '', ("assets/" + reddit.subreddit.submission.title + " #desabafos.mp4")))
+    filename = (re.sub('[?\"%*:|<>]', '', ("assets/" + reddit.subreddit.submission.title + " #desabafos #shorts.mp4")))
     # if filename already exists in folder, skip
     if os.path.isfile(filename):
         print("File already exists, skipping...")

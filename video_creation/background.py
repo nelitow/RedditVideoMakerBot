@@ -13,17 +13,12 @@ def get_start_and_end_times(video_length, length_of_clip):
 
 
 def download_background():
-    """Downloads the background video from youtube.
-
-    Shoutout to: bbswitzer (https://www.youtube.com/watch?v=n_Dv4JMiwK8)
-    """
-
     if not Path("assets/mp4/background.mp4").is_file():
         print_step(
             "We need to download the Minecraft background video. This is fairly large but it's only done once. 😎"
         )
         print_substep("Downloading the background video... please be patient 🙏")
-        YouTube("https://www.youtube.com/watch?v=76hBV1IqPhE").streams.filter(
+        YouTube("https://www.youtube.com/watch?v=KXQVB2AHeTg&ab_channel=GroMan%E2%96%BAPlay").streams.filter(
             res="720p"
         ).first().download(
             "assets/mp4",
