@@ -48,8 +48,8 @@ def get_subreddit_threads():
             subreddit = reddit.subreddit("askreddit")
             print_substep("Subreddit not defined. Using AskReddit.")
 
-    threads = subreddit.top(limit=125)
-    submission = list(threads)[random.randrange(0, 125)]
+    threads = subreddit.top(limit=200)
+    submission = list(threads)[random.randrange(0, 200)]
     print_substep(f"Video will be: {submission.title} :thumbsup:")
     try:
 
