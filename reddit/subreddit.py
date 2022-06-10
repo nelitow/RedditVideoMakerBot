@@ -53,18 +53,15 @@ def get_subreddit_threads():
             except ValueError:
                 subreddit = reddit.subreddit("askreddit")
                 print_substep("Subreddit not defined. Using AskReddit.")
+        threads = subreddit.hot(limit=20)
+        submission = list(threads)[random.randrange(0, 20)]
 
-        threads = subreddit.hot(limit=25)
-        submission = list(threads)[random.randrange(0, 25)]
 
-    threads = subreddit.top(limit=200)
-    submission = list(threads)[random.randrange(0, 200)]
     print_substep(f"Video will be: {submission.title} :thumbsup:")
     console.log("Getting video comments...")
     try:
         content["thread_url"] = submission.url
         content["thread_title"] = submission.title
-        content["thread_text"] = submission.selftext
         content["thread_post"] = submission.selftext
         content["comments"] = []
 
