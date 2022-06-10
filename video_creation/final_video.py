@@ -94,7 +94,7 @@ def make_final_video(number_of_clips):
     if os.path.isfile(filename):
         print("File already exists, skipping...")
     else:
-        final.write_videofile(filename, fps=30, audio_codec="aac", audio_bitrate="192k")
+        final.write_videofile(filename, fps=30, audio_codec="aac", audio_bitrate="192k", threads=16, preset="ultrafast")
 
     print_step("Done! 🎉")
 
