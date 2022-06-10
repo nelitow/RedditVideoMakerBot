@@ -31,9 +31,10 @@ def save_text_to_mp3(reddit_obj):
         tts.save(f"assets/mp3/posttext.mp3")
         length += MP3(f"assets/mp3/posttext.mp3").info.length
 
+
     for idx, comment in track(enumerate(reddit_obj["comments"]), "Saving..."):
-        # ! Stop creating mp3 files if the length is greater than 50 seconds. This can be longer, but this is just a good starting point
-        if length > 90:
+        # ! Stop creating mp3 files if the length is greater than 90 seconds and there is at least one comment.
+        if length > 90 and idx > 2:
             break
         tts = gTTS(text=comment["comment_body"], lang="pt-BR", slow=False, tld="com.br")
         tts.save(f"assets/mp3/{idx}.mp3")
