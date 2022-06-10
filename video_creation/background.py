@@ -11,6 +11,12 @@ def get_start_and_end_times(video_length, length_of_clip):
     random_time = randrange(180, int(length_of_clip) - int(video_length))
     return random_time, random_time + video_length
 
+# select a random video between https://www.youtube.com/watch?v=O3vaDxi7gio and https://www.youtube.com/watch?v=KXQVB2AHeTg&ab_channel=GroMan%E2%96%BAPlay
+videos = [
+    "https://www.youtube.com/watch?v=O3vaDxi7gio",
+    "https://www.youtube.com/watch?v=KXQVB2AHeTg&ab_channel=GroMan%E2%96%BAPlay"
+]
+video = videos[randrange(0, len(videos))]
 
 def download_background():
     if not Path("assets/mp4/background.mp4").is_file():
@@ -18,7 +24,7 @@ def download_background():
             "We need to download the Minecraft background video. This is fairly large but it's only done once. 😎"
         )
         print_substep("Downloading the background video... please be patient 🙏")
-        YouTube("https://www.youtube.com/watch?v=KXQVB2AHeTg&ab_channel=GroMan%E2%96%BAPlay").streams.filter(
+        YouTube(video).streams.filter(
             res="720p"
         ).first().download(
             "assets/mp4",
