@@ -53,8 +53,8 @@ def get_subreddit_threads():
             except ValueError:
                 subreddit = reddit.subreddit("askreddit")
                 print_substep("Subreddit not defined. Using AskReddit.")
-        threads = subreddit.hot(limit=20)
-        submission = list(threads)[random.randrange(0, 20)]
+        threads = subreddit.hot(limit=25)
+        submission = list(threads)[random.randrange(0, 25)]
 
 
     print_substep(f"Video will be: {submission.title} :thumbsup:")

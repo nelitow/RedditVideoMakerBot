@@ -55,7 +55,6 @@ def make_final_video(number_of_clips):
     audio_composite = CompositeAudioClip([audio_concat])
 
     # Gather all images
-    print_step("Gathering all images...")
     image_clips = []
     for i in range(0, number_of_clips):
         image_clips.append(
@@ -88,13 +87,9 @@ def make_final_video(number_of_clips):
     )
     image_concat.audio = audio_composite
     final = CompositeVideoClip([background_clip, image_concat])
-    final = final.speedx(1.5)
+    final = final.speedx(final_duration=59)
     filename = (re.sub('[?\"%*:|<>]', '', ("assets/" + reddit.subreddit.submission.title + " #desabafos #shorts.mp4")))
-    # if filename already exists in folder, skip
-    if os.path.isfile(filename):
-        print("File already exists, skipping...")
-    else:
-        final.write_videofile(filename, fps=30, audio_codec="aac", audio_bitrate="192k", threads=16, preset="ultrafast")
+    final.write_videofile(filename, fps=30, audio_codec="aac", audio_bitrate="192k", threads=16, preset="ultrafast")
 
     print_step("Done! 🎉")
 
