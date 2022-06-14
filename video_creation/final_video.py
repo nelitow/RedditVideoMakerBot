@@ -11,6 +11,7 @@ from moviepy.editor import (
 )
 import reddit.subreddit
 import re
+from googletrans import Translator
 from utils.console import print_step
 
 from dotenv import load_dotenv
@@ -28,7 +29,10 @@ def name_normalize(
     name = re.sub(r'([0-9]+)\s?\/\s?([0-9]+)', r'\1 of \2', name)
     name = re.sub(r'(\w+)\s?\/\s?(\w+)', r'\1 or \2', name)
     name = re.sub(r'\/', r'', name)
-    return name
+    translator = Translator()
+    name = translator.translate(name, src='en', dest='pt')
+
+    return name.text
 
 def make_final_video(number_of_clips):
     global submission
@@ -97,11 +101,11 @@ def make_final_video(number_of_clips):
     )
     image_concat.audio = audio_composite
     final = CompositeVideoClip([background_clip, image_concat])
-    final = final.speedx(final_duration=59)
+    final = final.speedx(1.55)
 
     filename = (re.sub('[?\"%*:|<>]', '', ("assets/" + name_normalize(
         reddit.subreddit.submission.title + " #desabafos #shorts.mp4"))))
     final.write_videofile(filename, fps=30, audio_codec="aac",
-                          audio_bitrate="192k", threads=16, preset="ultrafast")
+                          audio_bitrate="192k", threads=4, preset="ultrafast")
     for i in range(0, number_of_clips):
         pass
