@@ -9,7 +9,7 @@ from moviepy.editor import (
     CompositeAudioClip,
     CompositeVideoClip,
 )
-import reddit.subreddit 
+import reddit.subreddit
 import re
 from utils.console import print_step
 
@@ -19,6 +19,16 @@ import os
 W, H = 1080, 1920
 
 
+def name_normalize(
+        name: str
+) -> str:
+    name = re.sub(r'[?\\"%*:|<>]', '', name)
+    name = re.sub(r'( [w,W]\s?\/\s?[o,O,0])', r' without', name)
+    name = re.sub(r'( [w,W]\s?\/)', r' with', name)
+    name = re.sub(r'([0-9]+)\s?\/\s?([0-9]+)', r'\1 of \2', name)
+    name = re.sub(r'(\w+)\s?\/\s?(\w+)', r'\1 or \2', name)
+    name = re.sub(r'\/', r'', name)
+    return name
 
 def make_final_video(number_of_clips):
     global submission
@@ -61,7 +71,7 @@ def make_final_video(number_of_clips):
             ImageClip(f"assets/png/comment_{i}.png")
             .set_duration(audio_clips[i + 1].duration)
             .set_position("center")
-            .resize(width=W - 100)
+            .resize(width=W - 20)
             .set_opacity(float(opacity)),
         )
     if os.path.exists(f"assets/mp3/posttext.mp3"):
@@ -70,28 +80,28 @@ def make_final_video(number_of_clips):
             ImageClip(f"assets/png/title.png")
             .set_duration(audio_clips[0].duration + audio_clips[1].duration)
             .set_position("center")
-            .resize(width=W - 100)
+            .resize(width=W - 20)
             .set_opacity(float(opacity)),
-            )
+        )
     else:
         image_clips.insert(
             0,
             ImageClip(f"assets/png/title.png")
             .set_duration(audio_clips[0].duration)
             .set_position("center")
-            .resize(width=W - 100)
+            .resize(width=W - 20)
             .set_opacity(float(opacity)),
-            )
+        )
     image_concat = concatenate_videoclips(image_clips).set_position(
         ("center", "center")
     )
     image_concat.audio = audio_composite
     final = CompositeVideoClip([background_clip, image_concat])
     final = final.speedx(final_duration=59)
-    filename = (re.sub('[?\"%*:|<>]', '', ("assets/" + reddit.subreddit.submission.title + " #desabafos #shorts.mp4")))
-    final.write_videofile(filename, fps=30, audio_codec="aac", audio_bitrate="192k", threads=16, preset="ultrafast")
 
-    print_step("Done! 🎉")
-
+    filename = (re.sub('[?\"%*:|<>]', '', ("assets/" + name_normalize(
+        reddit.subreddit.submission.title + " #desabafos #shorts.mp4"))))
+    final.write_videofile(filename, fps=30, audio_codec="aac",
+                          audio_bitrate="192k", threads=16, preset="ultrafast")
     for i in range(0, number_of_clips):
         pass
